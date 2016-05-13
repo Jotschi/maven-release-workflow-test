@@ -1,5 +1,5 @@
-properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'StringParameterDefinition', name: 'myparam', defaultValue: 'default value']]]])
-echo "received ${binding.hasVariable('myparam') ? myparam : 'undefined'}"
+//properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'StringParameterDefinition', name: 'myparam', defaultValue: 'default value']]]])
+//echo "received ${binding.hasVariable('myparam') ? myparam : 'undefined'}"
 
 stage 'Test'
 def splits = splitTests parallelism: [$class: 'CountDrivenParallelism', size: 10], generateInclusions: true
@@ -17,8 +17,7 @@ for (int i = 0; i < splits.size(); i++) {
     }
   }
 }
-//parallel branches
-
+parallel branches
 
 node('dockerSlave') {
     def mvnHome = tool 'M3'
@@ -48,6 +47,9 @@ node('dockerSlave') {
       sh "git push origin master"
       sh "git push origin v${v}"
     }
+    
+    stage 'Docker Build'
+    sh "captain build"
 }
 
 def version() {

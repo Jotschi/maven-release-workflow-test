@@ -1,0 +1,7 @@
+release-test:
+  build: Dockerfile
+  image: registry.office/release-test
+  pre:
+    - echo "Preparing release-test"
+  post:
+    - echo "Finished release-test"
