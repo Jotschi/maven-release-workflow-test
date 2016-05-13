@@ -47,9 +47,11 @@ node('dockerSlave') {
       sh "git push origin master"
       sh "git push origin v${v}"
     }
-    
     stage 'Docker Build'
-    sh "captain build"
+    withEnv(['DOCKER_HOST=tcp://gemini.office:2375']) {
+        sh "captain build"
+        sh "captain push"
+    }
 }
 
 def version() {
