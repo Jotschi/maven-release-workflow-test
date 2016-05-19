@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.gentics.test</groupId>
 		<artifactId>maven-release-workflow-test</artifactId>
-		<version>1.0-130</version>
+		<version>1.0-131</version>
 	</parent>
 
 	<dependencies>
