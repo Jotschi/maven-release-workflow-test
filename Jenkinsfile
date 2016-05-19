@@ -1,5 +1,3 @@
-properties [[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Skip Tests?', name: 'skipTests']]]]
-echo "received ${skipTests}"
 
 stage 'Test'
 def splits = splitTests parallelism: [$class: 'CountDrivenParallelism', size: 10], generateInclusions: true
