@@ -1,5 +1,5 @@
-//properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'StringParameterDefinition', name: 'myparam', defaultValue: 'default value']]]])
-//echo "received ${binding.hasVariable('myparam') ? myparam : 'undefined'}"
+properties [[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Skip Tests?', name: 'skipTests']]]]
+echo "received ${binding.hasVariable('skipTests') ? skipTests : 'undefined'}"
 
 stage 'Test'
 def splits = splitTests parallelism: [$class: 'CountDrivenParallelism', size: 10], generateInclusions: true
