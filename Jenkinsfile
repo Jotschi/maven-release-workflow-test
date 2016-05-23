@@ -40,8 +40,10 @@ node('dockerSlave') {
     sh "git tag v${v}"
 
     stage 'Changelog'
-    sh "npm install git+ssh://git@git.gentics.com:psc/changelog-generator.git#master -g"
-    sh "changelog2html -t template.html  src/main/changelog/ > target/changelog.html"
+    sshagent(['601b6ce9-37f7-439a-ac0b-8e368947d98d']) {
+      sh "npm install git+ssh://git@git.gentics.com:psc/changelog-generator.git#master -g"
+      sh "changelog2html -t template.html  src/main/changelog/ > target/changelog.html"
+    }
 
     stage 'Release Build'
     sshagent(['601b6ce9-37f7-439a-ac0b-8e368947d98d']) {
