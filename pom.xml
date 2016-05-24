@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.gentics.test</groupId>
 	<artifactId>maven-release-workflow-test</artifactId>
-	<version>1.0-149</version>
+	<version>1.0-150</version>
 	<packaging>pom</packaging>
 
 	<modules>
