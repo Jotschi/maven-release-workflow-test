@@ -36,6 +36,7 @@
 				</executions>
 				<configuration>
 					<executable>changelog2html</executable>
+					<workingDirectory>${project.basedir}</workingDirectory>
 					<arguments>
 						<argument>-t</argument>
 						<argument>template.html</argument>
