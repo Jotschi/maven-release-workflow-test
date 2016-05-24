@@ -36,12 +36,11 @@
 				</executions>
 				<configuration>
 					<executable>changelog2html</executable>
-					<workingDirectory>${project.basedir}</workingDirectory>
 					<arguments>
 						<argument>-t</argument>
-						<argument>template.html</argument>
+						<argument>${project.basedir}/template.html</argument>
 						<argument>-o</argument>
-						<argument>target/changelog.html</argument>
+						<argument>${project.basedir}/target/changelog.html</argument>
 						<argument>${project.basedir}/src/main/changelog</argument>
 					</arguments>
 				</configuration>
