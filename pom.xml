@@ -13,13 +13,17 @@
 		<surefire.forkcount>8</surefire.forkcount>
 	</properties>
 
+
+	<scm>
+		<connection>scm:git:git@github.com:Jotschi/maven-release-workflow-test.git</connection>
+		<developerConnection>scm:git:git@github.com:Jotschi/maven-release-workflow-test.git</developerConnection>
+		<url>https://github.com/Jotschi/maven-release-workflow-test</url>
+		<tag>HEAD</tag>
+	</scm>
+
+
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>versions-maven-plugin</artifactId>
-				<version>2.1</version>
-			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
