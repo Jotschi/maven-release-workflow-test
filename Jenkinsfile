@@ -1,8 +1,6 @@
-properties [[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Trigger maven release', name: 'release']]]]
+properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Trigger maven release', name: 'release']]]])
 
-// properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'StringParameterDefinition', name: 'myparam', defaultValue: 'default value']]]])
-
- echo "received ${binding.hasVariable('release') ? release : 'undefined'}"
+ //echo "received ${binding.hasVariable('release') ? release : 'undefined'}"
 
 if (Boolean.valueOf(release)) {
 	stage 'Release Build'
