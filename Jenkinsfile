@@ -37,7 +37,8 @@ node('dockerSlave') {
     def originalV = version();
     def major = originalV[0];
     def minor = originalV[1];
-    def v = "${major}.${minor}-${env.BUILD_NUMBER}"
+    def patch  = originalV[2] + 1;
+    def v = "${major}.${minor}-${patch}
     if (v) {
        echo "Building version ${v}"
     }
