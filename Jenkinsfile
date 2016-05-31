@@ -1,7 +1,4 @@
-properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Trigger maven release', name: 'release']]]])
-
- //echo "received ${binding.hasVariable('release') ? release : 'undefined'}"
-
+properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [[$class: 'BooleanParameterDefinition', name: 'release', defaultValue: false]]]])
 if (Boolean.valueOf(release)) {
 	stage 'Release Build'
 	echo "Skipping release"
@@ -23,5 +20,4 @@ if (Boolean.valueOf(release)) {
 	        sh "${mvnHome}/bin/mvn -B release:prepare release:perform -Dresume=false -DignoreSnapshots=true -Darguments=\"-DskipTests\""
 	    }
 	}
-
 }
