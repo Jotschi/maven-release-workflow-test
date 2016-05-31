@@ -1,21 +1,28 @@
-
+properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
+[$class: 'BooleanParameterDefinition', name: 'skipTests', defaultValue: false],
+[$class: 'BooleanParameterDefinition', name: 'skipDocker', defaultValue: false]
+]]])
 stage 'Test'
-def splits = splitTests parallelism: [$class: 'CountDrivenParallelism', size: 10], generateInclusions: true
-def branches = [:]
-for (int i = 0; i < splits.size(); i++) {
-  def split = splits[i]
-  branches["split${i}"] = {
-    node('dockerSlave') {
-      checkout scm
-      writeFile file: (split.includes ? 'inclusions.txt' : 'exclusions.txt'), text: split.list.join("\n")
-      writeFile file: (split.includes ? 'exclusions.txt' : 'inclusions.txt'), text: ''
-      def mvnHome = tool 'M3'
-      sh "${mvnHome}/bin/mvn -B clean test -Dmaven.test.failure.ignore"
-      step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/*.xml'])
-    }
-  }
+if (Boolean.valueOf(skipTests)) {
+	echo "Skipped"
+} else {
+	def splits = splitTests parallelism: [$class: 'CountDrivenParallelism', size: 10], generateInclusions: true
+	def branches = [:]
+	for (int i = 0; i < splits.size(); i++) {
+	  def split = splits[i]
+	  branches["split${i}"] = {
+	    node('dockerSlave') {
+	      checkout scm
+	      writeFile file: (split.includes ? 'inclusions.txt' : 'exclusions.txt'), text: split.list.join("\n")
+	      writeFile file: (split.includes ? 'exclusions.txt' : 'inclusions.txt'), text: ''
+	      def mvnHome = tool 'M3'
+	      sh "${mvnHome}/bin/mvn -B clean test -Dmaven.test.failure.ignore"
+	      step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/*.xml'])
+	    }
+	  }
+	}
+	parallel branches
 }
-parallel branches
 
 node('dockerSlave') {
     def mvnHome = tool 'M3'
@@ -47,9 +54,13 @@ node('dockerSlave') {
     }
 
     stage 'Docker Build'
-    withEnv(['DOCKER_HOST=tcp://gemini.office:2375']) {
-        sh "captain build"
-        sh "captain push"
+    if (Boolean.valueOf(skipDocker)) {
+      echo "Skipped"
+    } else {
+	    withEnv(['DOCKER_HOST=tcp://gemini.office:2375']) {
+	        sh "captain build"
+	        sh "captain push"
+	    }
     }
 }
 
