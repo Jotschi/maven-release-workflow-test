@@ -35,9 +35,9 @@ node('dockerSlave') {
 
     stage 'Set Version'
     def originalV = version();
-    def major = originalV[0];
-    def minor = originalV[1];
-    def patch  = originalV[2] + 1;
+    def major = originalV[1];
+    def minor = originalV[2];
+    def patch  = Integer.parseInt(originalV[3]) + 1;
     def v = "${major}.${minor}-${patch}"
     if (v) {
        echo "Building version ${v}"
@@ -66,6 +66,6 @@ node('dockerSlave') {
 }
 
 def version() {
-    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
-    matcher ? matcher[0][1].tokenize(".") : null
+    def matcher = readFile('pom.xml') =~ '<version>(\\d*)\\.(\\d*)\\.(\\d*)(-SNAPSHOT)*</version>'
+    matcher ? matcher[0] : null
 }
