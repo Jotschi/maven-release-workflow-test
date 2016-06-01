@@ -17,8 +17,11 @@ if (Boolean.valueOf(skipTests)) {
 	      writeFile file: (split.includes ? 'inclusions.txt' : 'exclusions.txt'), text: split.list.join("\n")
 	      writeFile file: (split.includes ? 'exclusions.txt' : 'inclusions.txt'), text: ''
 	      def mvnHome = tool 'M3'
-	      sh "${mvnHome}/bin/mvn -B clean test"
-	      step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/*.xml'])
+	      try {
+	      	sh "${mvnHome}/bin/mvn -B clean test"
+	      } finally {
+	      	step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/*.xml'])
+	      }
 	    }
 	  }
 	}
