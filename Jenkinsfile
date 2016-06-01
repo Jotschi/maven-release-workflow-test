@@ -22,7 +22,12 @@ if (Boolean.valueOf(skipTests)) {
 	    }
 	  }
 	}
-	parallel branches
+	try {
+		parallel branches
+	} catch(err) {
+		echo "Failed " + err.getMessage()
+		error err.getMessage()
+	}
 }
 
 node('dockerSlave') {
