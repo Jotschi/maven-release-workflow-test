@@ -1,5 +1,7 @@
 package com.gentics.tests;
 
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
 public class Simple15Test  extends AbstractTest {
@@ -11,5 +13,6 @@ public class Simple15Test  extends AbstractTest {
 
 	@Test
 	public void testFailing() throws Exception {
+		fail("Dummy failure message");
 	}
 }
