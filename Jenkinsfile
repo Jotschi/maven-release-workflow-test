@@ -2,6 +2,7 @@ properties([[$class: 'ParametersDefinitionProperty', parameterDefinitions: [
 [$class: 'BooleanParameterDefinition', name: 'skipTests', defaultValue: false],
 [$class: 'BooleanParameterDefinition', name: 'skipDocker', defaultValue: false]
 ]]])
+
 stage 'Test'
 if (Boolean.valueOf(skipTests)) {
 	echo "Skipped"
@@ -30,8 +31,8 @@ node('dockerSlave') {
     sh "rm -rf *"
     sh "rm -rf .git"
     checkout scm
-    checkout([$class: 'GitSCM', branches: [[name: '*/master']],
-        extensions: [[$class: 'CleanCheckout'],[$class: 'LocalBranch', localBranch: "master"]]])
+    checkout([$class: 'GitSCM', branches: [[name: '*/' + env.BRANCH_NAME]],
+        extensions: [[$class: 'CleanCheckout'],[$class: 'LocalBranch', localBranch: env.BRANCH_NAME]]])
 
     stage 'Set Version'
     def originalV = version();
@@ -50,7 +51,7 @@ node('dockerSlave') {
     stage 'Release Build'
     sshagent(['601b6ce9-37f7-439a-ac0b-8e368947d98d']) {
       sh "${mvnHome}/bin/mvn -B -DskipTests clean deploy"
-      sh "git push origin master"
+      sh "git push origin " + env.BRANCH_NAME
       sh "git push origin v${v}"
     }
 
