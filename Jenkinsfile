@@ -6,17 +6,14 @@ properties([
         ])
 ])
 
-
-stash includes: '**', name: 'project'
-
-node('jenkins-slave') {
+node("jenkins-slave") {
 
     stage("Checkout") {
       checkout scm
       stash includes: '**', name: 'project'
     }
 
-    stage('Set Version') {
+    stage("Set Version") {
       def originalV = version();
       def major = originalV[1];
       def minor = originalV[2];
@@ -41,7 +38,7 @@ node('jenkins-slave') {
           def current = i
           def split = splits[i]
           branches["split${i}"] = {
-            node('jenkins-slave') {
+            node("jenkins-slave") {
               echo "Preparing slave environment for chunk ${current}"
               unstash 'project'
               writeFile file: (split.includes ? 'inclusions.txt' : 'exclusions.txt'), text: split.list.join("\n")
@@ -58,7 +55,7 @@ node('jenkins-slave') {
       }
     }
 
-    stage('Release Build') {
+    stage("Release Build") {
       sshagent(['git']) {
         sh "mvn -B -DskipTests clean deploy"
         sh "git push origin " + env.BRANCH_NAME
@@ -66,7 +63,7 @@ node('jenkins-slave') {
       }
     }
 
-    stage('Docker Build') {
+    stage("Docker Build") {
       if (Boolean.valueOf(params.skipDocker)) {
         echo "Skipped"
       } else {
